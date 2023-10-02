@@ -16,16 +16,16 @@ public class Rabbit {
     // ----------------------------------------------------
     // Characteristics shared by all rabbits (static fields).
     // ----------------------------------------------------
-	private static int BREEDING_AGE = 5;
+	private static int BREEDING_AGE = 3; // 1
 	
     // The age to which all rabbits can live.
-    private static int MAX_AGE = 30;
+    private static int MAX_AGE = 10; // 10
     
     // The likelihood of a rabbit breeding.
-    private static double BREEDING_PROBABILITY = 0.06;
+    private static double BREEDING_PROBABILITY = 0.2; // 0.1
     
     // The maximum number of births.
-    private static int MAX_LITTER_SIZE = 5;
+    private static int MAX_LITTER_SIZE = 5; // 5
 
     // -----------------------------------------------------
     // Individual characteristics (attributes).
