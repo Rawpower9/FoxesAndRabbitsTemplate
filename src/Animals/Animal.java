@@ -84,4 +84,5 @@ public class Animal {
 	public void setEaten() {
         alive = false;
     }
+
 }
