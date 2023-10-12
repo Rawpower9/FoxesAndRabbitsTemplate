@@ -47,12 +47,12 @@ public class Fox extends Animal{
 	 */
 	public Fox(boolean startWithRandomAge) {
 		super();
-		Fox.MAX_AGE = 50;
-		Fox.PREY_FOOD_VALUE = 5;
-		Fox.BREEDING_AGE = 5;
-		Fox.BREEDING_PROBABILITY = 0.15;
-		Fox.MAX_LITTER_SIZE = 3;
-		Fox.MAX_HUNGER = 50;
+		MAX_AGE = 50; // 50
+		PREY_FOOD_VALUE = 5;
+		BREEDING_AGE = 5;
+		BREEDING_PROBABILITY = 0.15;
+		MAX_LITTER_SIZE = 3;
+		MAX_HUNGER = 50;
 		super.setRandomAge(startWithRandomAge);
 	}
 
@@ -67,16 +67,15 @@ public class Fox extends Animal{
 	 * @param babyFoxStorage
 	 *                       A list to add newly born foxes to.
 	 */
-	public void hunt(Field currentField, Field updatedField, List<Fox> babyFoxStorage) {
+	public void act(Field currentField, Field updatedField, List<Animal> babyStorage) {
 		incrementAge();
 		incrementHunger();
 		if (alive) {
-			// New foxes are born into adjacent locations.
 			int births = breed();
 			for (int b = 0; b < births; b++) {
-				Fox newFox = new Fox(false);
+				Animal newFox = new Fox(false);
 				newFox.setFoodLevel(this.foodLevel);
-				babyFoxStorage.add(newFox);
+				babyStorage.add(newFox);
 				Location loc = updatedField.randomAdjacentLocation(location);
 				newFox.setLocation(loc);
 				updatedField.put(newFox, loc);
@@ -117,7 +116,7 @@ public class Fox extends Animal{
 				Rabbit rabbit = (Rabbit) animal;
 				if (rabbit.isAlive()) {
 					rabbit.setEaten();
-					foodLevel = Fox.PREY_FOOD_VALUE;
+					foodLevel = PREY_FOOD_VALUE;
 					return where;
 				}
 			}

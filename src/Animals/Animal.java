@@ -8,12 +8,12 @@ import java.io.Serializable;
 import java.util.List;
 
 public class Animal {
-    protected static int BREEDING_AGE;
-    protected static int MAX_AGE;
-    protected static double BREEDING_PROBABILITY;
-    protected static int MAX_LITTER_SIZE;
-    protected static int PREY_FOOD_VALUE;
-    protected static int MAX_HUNGER;
+    protected int BREEDING_AGE;
+    protected int MAX_AGE;
+    protected double BREEDING_PROBABILITY;
+    protected int MAX_LITTER_SIZE;
+    protected int PREY_FOOD_VALUE;
+    protected int MAX_HUNGER;
 
     protected int age;
     protected boolean alive;
@@ -85,4 +85,26 @@ public class Animal {
         alive = false;
     }
 
+    public void act(Field currentField, Field updatedField, List<Animal> babyStorage) {
+        // incrementAge();
+        // if (alive) {
+        //     int births = breed();
+        //     for (int b = 0; b < births; b++) {
+        //         Rabbit newRabbit = new Rabbit(false);
+        //         babyStorage.add(newRabbit);
+        //         Location loc = updatedField.randomAdjacentLocation(location);
+        //         newRabbit.setLocation(loc);
+        //         updatedField.put(newRabbit, loc);
+        //     }
+        //     Location newLocation = updatedField.freeAdjacentLocation(location);
+        //     // Only transfer to the updated field if there was a free location
+        //     if (newLocation != null) {
+        //         setLocation(newLocation);
+        //         updatedField.put(this, newLocation);
+        //     } else {
+        //         // can neither move nor stay - overcrowding - all locations taken
+        //         alive = false;
+        //     }
+        // }
+    }
 }

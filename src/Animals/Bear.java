@@ -33,12 +33,12 @@ public class Bear extends Animal{
 	 */
 	public Bear(boolean startWithRandomAge) {
 		super();
-		Bear.MAX_AGE = 100;
-		Bear.PREY_FOOD_VALUE = 70;
-		Bear.BREEDING_AGE = 10;
-		Bear.BREEDING_PROBABILITY = 0.015;
-		Bear.MAX_LITTER_SIZE = 1;
-		Bear.MAX_HUNGER = 100;
+		MAX_AGE = 100;
+		PREY_FOOD_VALUE = 70;
+		BREEDING_AGE = 10;
+		BREEDING_PROBABILITY = 0.015;
+		MAX_LITTER_SIZE = 1;
+		MAX_HUNGER = 100;
 		super.setRandomAge(startWithRandomAge);
 	}
 
@@ -53,16 +53,16 @@ public class Bear extends Animal{
 	 * @param babyBearStorage
 	 *            A list to add newly born Beares to.
 	 */
-	public void hunt(Field currentField, Field updatedField, List<Bear> babyBearStorage) {
+	public void act(Field currentField, Field updatedField, List<Animal> babyStorage) {
 		incrementAge();
 		incrementHunger();
 		if (alive) {
 			// New Beares are born into adjacent locations.
 			int births = breed();
 			for (int b = 0; b < births; b++) {
-				Bear newBear = new Bear(false);
+				Animal newBear = new Bear(false);
 				newBear.setFoodLevel(this.foodLevel);
-				babyBearStorage.add(newBear);
+				babyStorage.add(newBear);
 				Location loc = updatedField.randomAdjacentLocation(location);
 				newBear.setLocation(loc);
 				updatedField.put(newBear, loc);

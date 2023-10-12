@@ -45,10 +45,10 @@ public class Rabbit extends Animal {
     public Rabbit(boolean startWithRandomAge)
     {
         super();
-        Rabbit.MAX_AGE = 10;
-        Rabbit.BREEDING_AGE = 3;
-        Rabbit.BREEDING_PROBABILITY = 0.2;
-        Rabbit.MAX_LITTER_SIZE = 5;
+        MAX_AGE = 10; //10
+        BREEDING_AGE = 3; //3
+        BREEDING_PROBABILITY = 0.2; //0.2
+        MAX_LITTER_SIZE = 5; //5
         age = 0;
         alive = true;
         super.setRandomAge(startWithRandomAge);
@@ -60,14 +60,13 @@ public class Rabbit extends Animal {
      * @param updatedField The field to transfer to.
      * @param babyRabbitStorage A list to add newly born rabbits to.
      */
-    public void run(Field updatedField, List<Rabbit> babyRabbitStorage)
-    {
+	public void act(Field currentField, Field updatedField, List<Animal> babyStorage) {
         incrementAge();
         if(alive) {
             int births = breed();
             for(int b = 0; b < births; b++) {
-                Rabbit newRabbit = new Rabbit(false);
-                babyRabbitStorage.add(newRabbit);
+                Animal newRabbit = new Rabbit(false);
+                babyStorage.add(newRabbit);
                 Location loc = updatedField.randomAdjacentLocation(location);
                 newRabbit.setLocation(loc);
                 updatedField.put(newRabbit, loc);
@@ -75,7 +74,7 @@ public class Rabbit extends Animal {
             Location newLocation = updatedField.freeAdjacentLocation(location);
             // Only transfer to the updated field if there was a free location
             if(newLocation != null) {
-                setLocation(newLocation);
+                super.setLocation(newLocation);
                 updatedField.put(this, newLocation);
             }
             else {

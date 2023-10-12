@@ -13,8 +13,9 @@ import processing.core.PApplet;
  * A simple predator-prey simulator, based on a field containing rabbitList and
  * foxList.
  *
- * @author David J. Barnes and Michael Kolling. Modified by David Dobervich and Daniel Hutzley
- * 2007-2022
+ * @author David J. Barnes and Michael Kolling. Modified by David Dobervich and
+ *         Daniel Hutzley
+ *         2007-2022
  */
 public class Simulator {
     // The default width for the grid.
@@ -33,11 +34,13 @@ public class Simulator {
     private static final double RABBIT_CREATION_PROBABILITY = 0.08;
 
     private static final double BEAR_CREATION_PROBABILITY = 0.01;
+
+    private static final double HUMAN_CREATION_PROBABILITY = 0.002;
     // Lists of animals in the field. Separate lists are kept for ease of
     // iteration.
-    private ArrayList<Rabbit> rabbitList;
-    private ArrayList<Fox> foxList;
-    private ArrayList<Bear> bearList;
+    // private ArrayList<Rabbit> rabbitList;
+    // private ArrayList<Fox> foxList;
+    private ArrayList<Animal> AnimalStorage;
 
     // The current state of the field.
     private Field field;
@@ -80,10 +83,7 @@ public class Simulator {
             height = DEFAULT_HEIGHT;
             width = DEFAULT_WIDTH;
         }
-
-        rabbitList = new ArrayList<Rabbit>();
-        foxList = new ArrayList<Fox>();
-        bearList = new ArrayList<Bear>();
+        AnimalStorage = new ArrayList<Animal>();
         field = new Field(width, height);
         updatedField = new Field(width, height);
         stats = new FieldStats();
@@ -96,12 +96,15 @@ public class Simulator {
         this.graphicsWindow = p;
 
         // Create a view of the state of each location in the field.
-        view = new FieldDisplay(p, this.field, VIEW_EDGE_BUFFER, VIEW_EDGE_BUFFER, p.width - 2*VIEW_EDGE_BUFFER, p.height / 2 - 2 * VIEW_EDGE_BUFFER);
+        view = new FieldDisplay(p, this.field, VIEW_EDGE_BUFFER, VIEW_EDGE_BUFFER, p.width - 2 * VIEW_EDGE_BUFFER,
+                p.height / 2 - 2 * VIEW_EDGE_BUFFER);
         view.setColor(Rabbit.class, p.color(155, 155, 155));
         view.setColor(Fox.class, p.color(200, 0, 255));
         view.setColor(Bear.class, p.color(0, 255, 0));
+        view.setColor(Human.class, p.color(0, 0, 0));
 
-        graph = new Graph(p, view.getLeftEdge(), view.getBottomEdge()+VIEW_EDGE_BUFFER, view.getRightEdge(), p.height-VIEW_EDGE_BUFFER, 0,
+        graph = new Graph(p, view.getLeftEdge(), view.getBottomEdge() + VIEW_EDGE_BUFFER, view.getRightEdge(),
+                p.height - VIEW_EDGE_BUFFER, 0,
                 0, 500, field.getHeight() * field.getWidth());
 
         graph.title = "Animals.Fox and Animals.Rabbit Populations";
@@ -110,7 +113,7 @@ public class Simulator {
         graph.setColor(Rabbit.class, p.color(155, 155, 155));
         graph.setColor(Fox.class, p.color(200, 0, 255));
         graph.setColor(Bear.class, p.color(0, 255, 0));
-
+        graph.setColor(Human.class, p.color(0,0, 0));
     }
 
     /**
@@ -140,50 +143,50 @@ public class Simulator {
     public void simulateOneStep() {
         step++;
 
-        ArrayList<Bear> babyBearStorage = new ArrayList<Bear>();
-        for(int i = 0; i < bearList.size(); i++){
-            Bear bear = bearList.get(i);
-            bear.hunt(field, updatedField, babyBearStorage);
-            if(!bear.isAlive()){
-                bearList.remove(i);
+        ArrayList<Animal> babyStorage = new ArrayList<Animal>();
+        for (int i = 0; i < AnimalStorage.size(); i++) {
+            Animal animal = AnimalStorage.get(i);
+            animal.act(field, updatedField, babyStorage);
+            if (!animal.isAlive()) {
+                AnimalStorage.remove(i);
                 i--;
             }
         }
 
-        bearList.addAll(babyBearStorage);
-        // New List to hold newborn rabbitList.
-        ArrayList<Rabbit> babyRabbitStorage = new ArrayList<Rabbit>();
+        AnimalStorage.addAll(babyStorage);
+        // // New List to hold newborn rabbitList.
+        // ArrayList<Rabbit> babyRabbitStorage = new ArrayList<Rabbit>();
 
-        // Loop through all Rabbits. Let each run around.
-        for (int i = 0; i < rabbitList.size(); i++) {
-            Rabbit rabbit = rabbitList.get(i);
-            rabbit.run(updatedField, babyRabbitStorage);
-            if (!rabbit.isAlive()) {
-                rabbitList.remove(i);
-                i--;
-            }
-        }
+        // // Loop through all Rabbits. Let each run around.
+        // for (int i = 0; i < rabbitList.size(); i++) {
+        // Rabbit rabbit = rabbitList.get(i);
+        // rabbit.act(field,updatedField, babyStorage);
+        // if (!rabbit.isAlive()) {
+        // rabbitList.remove(i);
+        // i--;
+        // }
+        // }
 
-        // Add new born rabbitList to the main list of rabbitList.
-        rabbitList.addAll(babyRabbitStorage);
+        // // Add new born rabbitList to the main list of rabbitList.
+        // rabbitList.addAll(babyRabbitStorage);
 
-        // Create new list for newborn foxList.
-        ArrayList<Fox> babyFoxStorage = new ArrayList<Fox>();
+        // // Create new list for newborn foxList.
+        // ArrayList<Fox> babyFoxStorage = new ArrayList<Fox>();
 
-        // Loop through Foxes; let each run around.
-        for (int i = 0; i < foxList.size(); i++) {
-            Fox fox = foxList.get(i);
-            fox.hunt(field, updatedField, babyFoxStorage);
-            if (!fox.isAlive()) {
-                foxList.remove(i);
-                i--;
-            }
-        }
+        // // Loop through Foxes; let each run around.
+        // for (int i = 0; i < foxList.size(); i++) {
+        // Fox fox = foxList.get(i);
+        // fox.hunt(field, updatedField, babyFoxStorage);
+        // if (!fox.isAlive()) {
+        // foxList.remove(i);
+        // i--;
+        // }
+        // }
 
-        // Add new born foxList to the main list of foxList.
-        foxList.addAll(babyFoxStorage);
+        // // Add new born foxList to the main list of foxList.
+        // foxList.addAll(babyFoxStorage);
 
-        // Swap the field and updatedField at the end of the step.
+        // // Swap the field and updatedField at the end of the step.
         Field temp = field;
         field = updatedField;
         updatedField = temp;
@@ -192,7 +195,6 @@ public class Simulator {
         stats.generateCounts(field);
         updateGraph();
 
-        
     }
 
     public void updateGraph() {
@@ -207,9 +209,7 @@ public class Simulator {
      */
     public void reset() {
         step = 0;
-        rabbitList.clear();
-        foxList.clear();
-        bearList.clear();
+        AnimalStorage.clear();
         field.clear();
         updatedField.clear();
         initializeBoard(field);
@@ -218,9 +218,6 @@ public class Simulator {
             graph.clear();
             graph.setDataRanges(0, 500, 0, field.getHeight() * field.getWidth());
         }
-
-        // Show the starting state in the view.
-        // view.showStatus(step, field);
     }
 
     /**
@@ -234,30 +231,35 @@ public class Simulator {
         for (int row = 0; row < field.getHeight(); row++) {
             for (int col = 0; col < field.getWidth(); col++) {
                 if (rand.nextDouble() <= FOX_CREATION_PROBABILITY) {
-                    Fox fox = new Fox(true);
+                    Animal fox = new Fox(true);
                     fox.setLocation(row, col);
-                    foxList.add(fox);
+                    AnimalStorage.add(fox);
                     field.put(fox, row, col);
                 } else if (rand.nextDouble() <= RABBIT_CREATION_PROBABILITY) {
-                    Rabbit rabbit = new Rabbit(true);
+                    Animal rabbit = new Rabbit(true);
                     rabbit.setLocation(row, col);
-                    rabbitList.add(rabbit);
+                    AnimalStorage.add(rabbit);
                     field.put(rabbit, row, col);
-                } else if(rand.nextDouble() <= BEAR_CREATION_PROBABILITY){
-                    Bear bear = new Bear(true);
+                } else if (rand.nextDouble() <= BEAR_CREATION_PROBABILITY) {
+                    Animal bear = new Bear(true);
                     bear.setLocation(row, col);
-                    bearList.add(bear);
+                    AnimalStorage.add(bear);
                     field.put(bear, row, col);
+                } else if (rand.nextDouble() <= HUMAN_CREATION_PROBABILITY) {
+                    Animal human = new Human(true);
+                    human.setLocation(row, col);
+                    AnimalStorage.add(human);
+                    field.put(human, row, col);
                 }
             }
         }
-        Collections.shuffle(rabbitList);
-        Collections.shuffle(foxList);
+        Collections.shuffle(AnimalStorage);
     }
 
     /**
      * Determine whether the simulation is still viable.
      * I.e., should it continue to run.
+     * 
      * @return true If there is more than one species alive.
      */
     private boolean isViable() {
@@ -286,17 +288,18 @@ public class Simulator {
     public void handleMouseClick(float mouseX, float mouseY) {
         Location loc = view.gridLocationAt(mouseX, mouseY); // get grid at
         // click.
-        if (loc == null) return;
+        if (loc == null)
+            return;
 
         for (int x = loc.getCol() - 8; x < loc.getCol() + 8; x++) {
             for (int y = loc.getRow() - 8; y < loc.getRow() + 8; y++) {
                 Location locToCheck = new Location(y, x);
                 if (field.isLegalLocation(locToCheck)) {
                     Object animal = field.getObjectAt(locToCheck);
-                    if (animal instanceof Rabbit)
-                        rabbitList.remove((Rabbit) animal);
-                    if (animal instanceof Fox)
-                        foxList.remove((Fox) animal);
+                    // if (animal instanceof Rabbit)
+                    AnimalStorage.remove(animal);
+                    // if (animal instanceof Fox)
+                    // foxList.remove((Fox) animal);
                     field.put(null, locToCheck);
                     updatedField.put(null, locToCheck);
                 }
